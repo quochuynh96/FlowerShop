@@ -1,0 +1,51 @@
+﻿@model FlowerShop.PRODUCT
+
+@{
+    ViewBag.Title = "Xóa sản phẩm";
+}
+
+<h4>XÁC NHẬN XÓA SẢN PHẨM</h4>
+
+<h5>Ban có chắc muốn xóa sản phẩm ?</h5>
+<div>
+    <h6><i class="fas fa-box-open"></i> @Model.Product_Name</h6>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            <b>Tên sản phẩm :</b>
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product_Name)
+        </dd>
+
+        <dt>
+            <b>Giá sản phẩm :</b>
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product_Price)
+        </dd>
+
+        <dt>
+            <b>Giới thiệu sản phẩm :</b>
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product_Description)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm("ConfirmDelete","Product",FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.EditorFor(model => model.Product_ID, new { htmlAttributes = new { @type = "hidden" } })
+        <div class="form-actions no-color">
+            <input type="submit" value="Xác nhận" class="btn btn-outline-danger" />
+            <div>
+                @Html.ActionLink("<< Danh sách sản phẩm", "Index")
+            </div>
+        </div>
+    }
+</div>

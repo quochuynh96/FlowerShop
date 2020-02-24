@@ -1,0 +1,126 @@
+﻿@model IEnumerable<FlowerShop.PRODUCT>
+    @using FlowerShop.Helper
+
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+    Helper helper = new Helper();
+}
+
+<h4>QUẢN LÝ SẢN PHẨM</h4>
+<a href="@Url.Action("Create", "Product")" class="btn btn-outline-primary" style="margin-bottom: 10px;">
+    <i class="fas fa-plus-circle"></i> &nbsp;Thêm mới sản phẩm !
+</a>
+@Html.Raw(ViewBag.Message)
+<table class="table table-striped" style="font-size: 12px;">
+    <tr>
+        <th>
+            STT
+        </th>
+        <th>
+            Tên sản phẩm
+        </th>
+        <th style="width: 11%;">
+            Giá sản phẩm
+        </th>
+        <th style="width: 35%;">
+            Giới thiệu sản phẩm
+        </th>
+        <th>
+            Số lượng còn
+        </th>
+        <th style="width: 10%;">
+            Tình trạng
+        </th>
+        <th>
+            Loại sản phẩm
+        </th>
+        <th style="width : 17%">
+            Thao tác
+        </th>
+    </tr>
+
+    @{int i = 0; }
+    @foreach (var item in Model)
+    {
+        string des = item.Product_Description;
+        string subdes = string.Empty;
+        if(des.Length > 50)
+        {
+           subdes = des.Substring(0,50);
+        }
+        else
+        {
+             subdes = des;
+        }
+        <tr>
+            <td>
+                @{
+                    i++;
+                }
+                @i
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product_Price) VNĐ
+            </td>
+            <td>
+                @subdes ...
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product_Stock_Quantity)
+            </td>
+            <td>
+                @{
+                    if (item.Product_Status == 1)
+                    {
+                        <p>Khả dụng</p>
+                    }
+                    else
+                    {
+                        <p>Đã ẩn</p>
+                    }
+                }
+            </td>
+            <td>
+                @{ 
+                    foreach(var ct in helper.GetCATEGORies())
+                    {
+                        if(ct.Categories_ID == item.Categories_ID)
+                        {
+                            @ct.Categories_Name
+                            break;
+                        }
+                    }
+                }
+            </td>
+            <td style="text-align: center;">
+                <a href="@Url.Action("Edit", "Product",new {ID = item.Product_ID})" class="btn btn-outline-primary">
+                    <i class='fas fa-edit'></i>
+                </a>
+                <a href="@Url.Action("Delete", "Product",new {ID = item.Product_ID})" class="btn btn-outline-danger">
+                    <i class="fas fa-trash"></i>
+                </a>
+                @{
+                    if (item.Product_Status == 1)
+                    {
+                        <a href="@Url.Action("Hide", "Product",new {ID = item.Product_ID})" class="btn btn-outline-danger">
+                            <i class="fas fa-eye-slash"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Show", "Product",new {ID = item.Product_ID})" class="btn btn-outline-danger">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+<div>
+    <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>

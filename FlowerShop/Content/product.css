@@ -1,0 +1,8 @@
+﻿td,th {
+    vertical-align: middle !important;
+    border: 1px solid #dddddd;
+}
+.form-group{
+    display : flex;
+    align-items : center;
+}

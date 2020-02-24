@@ -1,0 +1,72 @@
+﻿@model FlowerShop.CUSTOMER
+
+@{
+    ViewBag.Title = "Xác nhận đơn hàng";
+}
+
+<h4><i class="fas fa-clipboard-check"></i> &nbsp; Xác nhận đặt hàng :</h4>
+
+
+@using (Html.BeginForm("AddNewOrder","Order",FormMethod.Post))
+{
+<div class="form-horizontal" style="font-size : 13px">
+    <hr />
+    <div class="form-group d-flex justify-content-center">
+        <b class="control-label col-md-2">Tên người nhận</b>
+        <div class="col-md-5">
+            <input class="form-control" disabled type="text" value="@Model.Customers_Name" />
+        </div>
+    </div>
+    <div class="form-group d-flex justify-content-center">
+        <b class="control-label col-md-2">Ngày đặt hàng</b>
+        <div class="col-md-5">
+            <input class="form-control" disabled type="text" value="@String.Format("{0:dd/MM/yyyy}", DateTime.Now)" />
+        </div>
+    </div>
+    <div class="form-group d-flex justify-content-center">
+        <b class="control-label col-md-2">Địa chỉ người nhận</b>
+        <div class="col-md-5">
+            <input class="form-control" disabled type="text" value="@Model.Customers_Address" />
+        </div>
+    </div>
+    <div class="form-group d-flex justify-content-center">
+        <b class="control-label col-md-2">Tổng thanh toán</b>
+        <div class="col-md-5">
+            <input class="form-control" disabled type="text" value="@ViewData["getCountCurOfCart"]" />
+        </div>
+    </div>
+    <div class="form-group d-flex justify-content-center">
+        <b class="control-label col-md-2">Ghi chú</b>
+        <div class="col-md-5">
+            <input class="form-control" name="Note" id="Note" type="text" placeholder="Thông tin thêm ..." />
+        </div>
+    </div>
+    <div class="form-group d-flex justify-content-center">
+        <b class="control-label col-md-2">Phương thức thanh toán</b>
+        <div class="col-md-5">
+            <select class="form-control" name="Payment_Method" id="Payment_Method">
+                <option value="0">COD</option>
+                <option value="1">Chuyển khoản</option>
+                <option value="2">Khác</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group d-flex justify-content-center">
+        <div class="col-md-offset-2 col-md-10  d-flex justify-content-center">
+            <input type="submit" value="Gửi yêu cầu đặt hàng" class="btn btn-outline-success" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    <a href="@Url.Action("Index", "Cart")"><i class="fas fa-shopping-cart"></i> &nbsp; Quay lại giỏ hàng !</a>
+</div>
+<div>
+    <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,57 @@
+﻿@model FlowerShop.ORDER
+@using FlowerShop.Helper
+
+@{
+    ViewBag.Title = "Hướng dẫn thanh toán";
+    Helper helper = new Helper();
+    string cur = helper.getTotalCurOrderByID(Model.Orders_ID);
+}
+
+<h6>Hướng dẫn thanh toán cho đơn hàng :</h6>
+
+<div>
+    <h7> Order-@Model.Orders_ID</h7>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Số tài khoản :
+        </dt>
+
+        <dd>
+            1234-0000-234-567
+        </dd>
+        <dt>
+            Chủ tài khoản :
+        </dt>
+
+        <dd>
+            Phạm Việt Uyên
+        </dd>
+        <dt>
+            Ngân hàng :
+        </dt>
+
+        <dd>
+            ABC Bank - Chi nhánh Huế
+        </dd>
+        <dt>
+            Số tiền chuyển :
+        </dt>
+
+        <dd>
+            @cur
+        </dd>
+        <dt>
+            Nội dung chuyển khoản :
+        </dt>
+
+        <dd>
+            <input type="text" style="font-weight : bold; border-radius : 5px" value="Thanh toán đơn hàng Order-@Model.Orders_ID" />
+        </dd>
+    </dl>
+</div>
+<div>
+    <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>
+
+

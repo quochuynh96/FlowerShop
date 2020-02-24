@@ -1,0 +1,249 @@
+﻿@using FlowerShop.Helper
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - UynUyn FlowerShop</title>
+    <link rel="shortcut icon" href="~/Images/logo/13.png" type="image/x-icon">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/product.css");
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/popper.min.js")
+    @Scripts.Render("~/Scripts/custom.js")
+    <style>
+        .nav-item {
+            padding-left: 15px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row d-flex justify-content-center mb-3">
+            <a href="@Url.Action("Index","Home")"><img src="~/Images/logo/13.png" alt="" height="200px"></a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="border-radius: 5px;">
+                    <a class="navbar-brand" href="@Url.Action("Index","Home")" style="font-weight: bold"><i class="fas fa-home"></i>&nbsp;Trang chủ</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("About","Home")"><i class="fas fa-info-circle"></i>&nbsp;Giới thiệu</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index","Home")"><i class="fas fa-box-open"></i>&nbsp;Sản phẩm</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Contact","Home")"><i class="fas fa-phone"></i>&nbsp;Liên hệ</a>
+                            </li>
+                        </ul>
+                        @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0" }))
+                        {
+                            <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm sản phẩm ..." aria-label="Search" id="keyword" name="keyword">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        }
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container body-content mt-3">
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <nav class="nav flex-column navbar-dark bg-dark" style="border-radius: 5px;">
+                    <b style="font-size : 14px;color : white;padding-left: 10px;padding-top: 10px;"> Danh mục sản phẩm :</b>
+                    @{
+                        Helper helper = new Helper();
+                        foreach (var item in helper.GetCATEGORies())
+                        {
+                            <div class="nav-link">
+                                <i class="fas fa-list" style="color : white"></i><a href="@Url.Action("FilterByCategories","Home",new { CtID = item.Categories_ID})" style="color : white;font-size : 14px">&nbsp; @item.Categories_Name</a>
+                            </div>
+                        }
+                    }
+                    <div style="margin-bottom: 50px;"></div>
+                </nav>
+            </div>
+            <div class="col-md-8">
+                @RenderBody()
+                <hr />
+            </div>
+            <div class="col-md-2">
+                <nav class="nav flex-column navbar-dark bg-dark" style="border-radius: 5px;">
+                    <div class="nav-link row d-flex justify-content-center mt-3">
+                        @{
+                            var Customers = Session["Customers"] as CUSTOMER;
+                            if (Customers == null)
+                            {
+                                <div><a href="@Url.Action("Index", "Login")"><i class="fas fa-sign-in-alt"></i> &nbsp; Đăng nhập !</a></div>
+                            }
+                            else
+                            {
+                    <div class="nav-link row d-flex justify-content-center"><a href="@Url.Action("Index","Customers")" style="color : white;font-weight: 500;text-align: center;">Tài khoản : @Customers.Customers_Name</a></div><div><a href="@Url.Action("Logout", "Home")">&nbsp;(<i class="fas fa-sign-out-alt"></i> &nbsp; Đăng xuất !)</a></div>
+                            }
+                        }
+                    </div>
+                    <div class="nav-link row d-flex justify-content-center">
+                        @if ((Customers != null) && (Customers.Customers_Name.CompareTo("Admin") == 0))
+                        {
+
+                        }
+                        else
+                        {
+                            <a class="nav-link" href="@Url.Action("Index","Cart")" style="display: -webkit-inline-box"><i class="fas fa-shopping-cart"></i> Giỏ hàng (<p id="cart-count"></p>)</a>
+                            <div class="row d-flex justify-content-center" style="display: -webkit-inline-box;font-weight : 500;color : white;"><p id="cart-cur-count"></p> <spam>&nbsp; VNĐ</spam></div>
+                        }
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- Footer -->
+    </div>
+    <footer class="page-footer font-small unique-color-dark" style="background-color: #1C2331;color: white;">
+
+        <div style="background-color: #161C27;">
+            <div class="container">
+                <div class="row py-4 d-flex align-items-center">
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Footer Links -->
+        <div class="container text-center text-md-left mt-5">
+
+            <!-- Grid row -->
+            <div class="row mt-3">
+
+                <!-- Grid column -->
+                <div class="col-md-7 col-lg-7 col-xl-7 mx-auto mb-4">
+
+                    <!-- Content -->
+                    <h6 class="text-uppercase font-weight-bold">ĐỀ CƯƠNG CHUYÊN ĐỀ TỐT NGHIỆP</h6>
+                    <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p>
+                        Khóa học: K49 (2015 – 2019).<br>
+                        Chuyên ngành: Tin học kinh tế.<br>
+                        Tên đề tài thực hiện: Xây dựng ứng dụng Website thương mại điện tử trong lĩnh vực kinh doanh hoa sử dụng nền tảng ASP.NET MVC.<br>
+                        Sinh viên thực hiện: Phạm Việt Uyên.<br>
+                        Giảng viên hướng dẫn: ThS. Lê Viết Mẫn.<br>
+                    </p>
+
+                </div>
+
+                <!-- Grid column -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+
+                    <!-- Links -->
+                    <h6 class="text-uppercase font-weight-bold">Danh mục</h6>
+                    <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p>
+                        <a href="@Url.Action("Index","Home")"><i class="fas fa-home"></i>&nbsp;Trang chủ</a>
+                    </p>
+                    <p>
+                        <a href="@Url.Action("About","Home")"><i class="fas fa-info-circle"></i>&nbsp;Giới thiệu</a>
+                    </p>
+                    <p>
+                        <a href="@Url.Action("Index","Home")"><i class="fas fa-box-open"></i>&nbsp;Sản phẩm</a>
+                    </p>
+                    <p>
+                        <a href="@Url.Action("Contact","Home")"><i class="fas fa-phone"></i>&nbsp;Liên hệ</a>
+                    </p>
+
+                </div>
+                <!-- Grid column -->
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+
+                    <!-- Links -->
+                    <h6 class="text-uppercase font-weight-bold">Liên hệ</h6>
+                    <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p>
+                        <i class="fas fa-home mr-3"></i> Uyn Uyn FlowerShop
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope mr-3"></i> uyenpham456@gmail.com
+                    </p>
+                    <p>
+                        <i class="fas fa-phone mr-3"></i> + 01 234 567 88
+                    </p>
+                    <p>
+                        <i class="fas fa-print mr-3"></i> + 01 234 567 89
+                    </p>
+
+                </div>
+                <!-- Grid column -->
+
+            </div>
+            <!-- Grid row -->
+
+        </div>
+        <!-- Footer Links -->
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3" style="background-color: #161C27">
+            © 2019 Copyright:
+            <a href="#"> Uyn Uyn FlowerShop</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+    <script>
+           function updateCountCart() {
+        $.ajax({
+        type: "GET",
+        url: "@Url.Action("getCountOfCart", "Cart")",
+        data: {},
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            $("#cart-count").html(response);
+        },
+        failure: function (response) {
+            $("#cart-count").html(response.responseText);
+        },
+        error: function (response) {
+            $("#cart-count").html(response.responseText);
+        }
+        });
+    };
+    function updateCountCurCart() {
+        $.ajax({
+        type: "GET",
+        url: "@Url.Action("getCountCurOfCart", "Cart")",
+        data: {},
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            $("#cart-cur-count").html(response);
+            $("#cart-cur-count2").html(response);
+        },
+        failure: function (response) {
+            $("#cart-cur-count").html(response.responseText);
+             $("#cart-cur-count2").html(response.responseText);
+        },
+        error: function (response) {
+            $("#cart-cur-count").html(response.responseText);
+             $("#cart-cur-count2").html(response.responseText);
+        }
+        });
+    };
+    $(document).ready(function () {
+       updateCountCart();
+       updateCountCurCart();
+    });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

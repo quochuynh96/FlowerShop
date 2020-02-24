@@ -1,0 +1,55 @@
+﻿@model IEnumerable<FlowerShop.IMAGE>
+@using FlowerShop.Helper;
+
+@{
+    ViewBag.Title = "Danh sách hình ảnh";
+    Helper helper = new Helper();
+
+}
+
+<h6>Danh sách hình ảnh</h6>
+<hr />
+<p>
+    <div>
+        <a class="btn btn-outline-danger" href="@Url.Action("Upload", "Image")"><i class="fas fa-upload"></i> &nbsp; Upload hình ảnh</a>
+    </div>
+</p>
+<table class="table" style="text-align : center; vertical-align : middle;font-size: 12px;">
+    <tr>
+        <th>
+            Hình ảnh
+        </th>
+        <th>
+            Đường dẫn
+        </th>
+        <th>
+            Sản phẩm
+        </th>
+        <th>Thao tác</th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    string proName = helper.getProdByID((int)item.Product_ID).Product_Name;
+    <tr>
+        <td>
+            <img src="@item.Image_Path" alt="#" width="100px">
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Image_Path)
+        </td>
+        <td>
+            @proName
+        </td>
+        <td>
+            <div>
+                <a class="btn btn-outline-danger" href="@Url.Action("Delete", "Image", new { Image_ID = item.Image_ID}) "><i class="fas fa-trash"></i> &nbsp; Xóa</a>
+            </div>
+        </td>
+    </tr>
+}
+
+</table>
+<div>
+    <a href="@Url.Action("Index", "Home")" ><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>

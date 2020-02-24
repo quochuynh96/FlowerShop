@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FlowerShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CATEGORIES">
+    <Key>
+      <PropertyRef Name="Categories_ID" />
+    </Key>
+    <Property Name="Categories_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Categories_Name" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="CUSTOMERS">
+    <Key>
+      <PropertyRef Name="Customers_ID" />
+    </Key>
+    <Property Name="Customers_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customers_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Customers_Email" Type="varchar" MaxLength="50" />
+    <Property Name="Customers_Password" Type="varchar" MaxLength="50" />
+    <Property Name="Customers_Phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="Customers_Address" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="IMAGE">
+    <Key>
+      <PropertyRef Name="Image_ID" />
+    </Key>
+    <Property Name="Image_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Image_Path" Type="nvarchar" MaxLength="100" />
+    <Property Name="Product_ID" Type="int" />
+  </EntityType>
+  <EntityType Name="ORDERS">
+    <Key>
+      <PropertyRef Name="Orders_ID" />
+    </Key>
+    <Property Name="Orders_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Orders_Date" Type="date" />
+    <Property Name="Customers_ID" Type="int" />
+    <Property Name="Status" Type="tinyint" />
+    <Property Name="Note" Type="nvarchar" MaxLength="150" />
+    <Property Name="Payment_Method" Type="tinyint" />
+    <Property Name="Payment_Status" Type="tinyint" />
+  </EntityType>
+  <EntityType Name="ORDERS_DETAIL">
+    <Key>
+      <PropertyRef Name="OrdersDetail_ID" />
+    </Key>
+    <Property Name="OrdersDetail_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Orders_ID" Type="int" />
+    <Property Name="Product_ID" Type="int" />
+    <Property Name="Product_Num" Type="int" />
+  </EntityType>
+  <EntityType Name="PRODUCT">
+    <Key>
+      <PropertyRef Name="Product_ID" />
+    </Key>
+    <Property Name="Product_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Product_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Product_Price" Type="int" />
+    <Property Name="Product_Description" Type="nvarchar(max)" />
+    <Property Name="Product_Stock_Quantity" Type="bigint" />
+    <Property Name="Product_Status" Type="tinyint" />
+    <Property Name="Categories_ID" Type="int" />
+  </EntityType>
+  <Association Name="FK_IMAGE_PRODUCT">
+    <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="IMAGE" Type="Self.IMAGE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRODUCT">
+        <PropertyRef Name="Product_ID" />
+      </Principal>
+      <Dependent Role="IMAGE">
+        <PropertyRef Name="Product_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ORDERS_CUSTOMERS">
+    <End Role="CUSTOMERS" Type="Self.CUSTOMERS" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CUSTOMERS">
+        <PropertyRef Name="Customers_ID" />
+      </Principal>
+      <Dependent Role="ORDERS">
+        <PropertyRef Name="Customers_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ORDERS_DETAIL_ORDERS">
+    <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ORDERS_DETAIL" Type="Self.ORDERS_DETAIL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ORDERS">
+        <PropertyRef Name="Orders_ID" />
+      </Principal>
+      <Dependent Role="ORDERS_DETAIL">
+        <PropertyRef Name="Orders_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ORDERS_DETAIL_PRODUCT">
+    <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ORDERS_DETAIL" Type="Self.ORDERS_DETAIL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRODUCT">
+        <PropertyRef Name="Product_ID" />
+      </Principal>
+      <Dependent Role="ORDERS_DETAIL">
+        <PropertyRef Name="Product_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRODUCT_CATEGORIES">
+    <End Role="CATEGORIES" Type="Self.CATEGORIES" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CATEGORIES">
+        <PropertyRef Name="Categories_ID" />
+      </Principal>
+      <Dependent Role="PRODUCT">
+        <PropertyRef Name="Categories_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FlowerShopModelStoreContainer">
+    <EntitySet Name="CATEGORIES" EntityType="Self.CATEGORIES" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMERS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IMAGE" EntityType="Self.IMAGE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ORDERS" EntityType="Self.ORDERS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ORDERS_DETAIL" EntityType="Self.ORDERS_DETAIL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PRODUCT" EntityType="Self.PRODUCT" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_IMAGE_PRODUCT" Association="Self.FK_IMAGE_PRODUCT">
+      <End Role="PRODUCT" EntitySet="PRODUCT" />
+      <End Role="IMAGE" EntitySet="IMAGE" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ORDERS_CUSTOMERS" Association="Self.FK_ORDERS_CUSTOMERS">
+      <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
+      <End Role="ORDERS" EntitySet="ORDERS" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ORDERS_DETAIL_ORDERS" Association="Self.FK_ORDERS_DETAIL_ORDERS">
+      <End Role="ORDERS" EntitySet="ORDERS" />
+      <End Role="ORDERS_DETAIL" EntitySet="ORDERS_DETAIL" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ORDERS_DETAIL_PRODUCT" Association="Self.FK_ORDERS_DETAIL_PRODUCT">
+      <End Role="PRODUCT" EntitySet="PRODUCT" />
+      <End Role="ORDERS_DETAIL" EntitySet="ORDERS_DETAIL" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRODUCT_CATEGORIES" Association="Self.FK_PRODUCT_CATEGORIES">
+      <End Role="CATEGORIES" EntitySet="CATEGORIES" />
+      <End Role="PRODUCT" EntitySet="PRODUCT" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

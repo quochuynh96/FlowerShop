@@ -1,0 +1,50 @@
+﻿@model IEnumerable<FlowerShop.PRODUCT>
+
+@{
+    ViewBag.Title = "Upload hình ảnh mới";
+}
+
+<h4>Upload hình ảnh mới</h4>
+
+
+@using (Html.BeginForm("UpLoadNew", "Image", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Chọn sản phẩm</b>
+        <div class="col-md-5">
+            <select id="Product_ID" name="Product_ID" class="form-control">
+                @{
+                    foreach (var item in Model)
+                    {
+                        <option value="@item.Product_ID">@item.Product_Name</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <div class="col-md-offset-2 col-md-5 d-flex justify-content-center">
+            <input type="submit" value="Chọn" class="btn btn-outline-success" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("<< Danh sách hình ảnh", "Index")
+</div>
+<div>
+    <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

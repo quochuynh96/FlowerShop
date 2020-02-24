@@ -1,0 +1,112 @@
+﻿@model IEnumerable<FlowerShop.ORDERS_DETAIL>
+@using FlowerShop.Helper;
+
+@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+    Helper helper = new Helper();
+    ORDER order = ViewData["Order"] as ORDER;
+    string cur = helper.getTotalCurOrderByID(order.Orders_ID);
+}
+
+<h6>Chi tiết đơn hàng : @ViewData["Order_ID"]</h6>
+
+<table class="table">
+    <tr>
+        <th>
+
+        </th>
+        <th>
+            Sản phẩm
+        </th>
+        <th>
+            Số lượng
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        string imgPath = helper.getImageByProductID((int)item.Product_ID);
+        string proName = helper.getProdByID((int)item.Product_ID).Product_Name;
+        <tr>
+            <td>
+                <img src="@imgPath" alt="#" width="100px" />
+            </td>
+            <td>
+                @proName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product_Num)
+            </td>
+        </tr>
+    }
+
+</table>
+
+@if ((byte)order.Payment_Method == 1)
+{
+    <hr />
+    <h6>Hướng dẫn thanh toán :</h6>
+    <dl class="dl-horizontal">
+        <dt>
+            Số tài khoản :
+        </dt>
+
+        <dd>
+            1234-0000-234-567
+        </dd>
+        <dt>
+            Chủ tài khoản :
+        </dt>
+
+        <dd>
+            Phạm Việt Uyên
+        </dd>
+        <dt>
+            Ngân hàng :
+        </dt>
+
+        <dd>
+            ABC Bank - Chi nhánh Huế
+        </dd>
+        <dt>
+            Số tiền chuyển :
+        </dt>
+
+        <dd>
+            @cur
+        </dd>
+        <dt>
+            Nội dung chuyển khoản :
+        </dt>
+
+        <dd>
+            <input type="text" style="font-weight : bold; border-radius : 5px" value="Thanh toán đơn hàng Order-@order.Orders_ID" />
+        </dd>
+    </dl>
+}
+else
+{
+    <hr />
+    <h6>Hướng dẫn thanh toán :</h6>
+    <dl class="dl-horizontal">
+        <dt>
+            Phương thức thanh toán :
+        </dt>
+
+        <dd>
+            Thanh toán khi nhận hàng
+        </dd>
+
+        <dt>
+            Số tiền cần thanh toán :
+        </dt>
+
+        <dd>
+            @cur
+        </dd>
+    </dl>
+}
+
+<a href="@Url.Action("getListOrder", "Order")">
+    <i class="fas fa-clipboard"></i>&nbsp;Danh sách đơn hàng
+</a>

@@ -1,0 +1,176 @@
+﻿@model IEnumerable<FlowerShop.ORDER>
+@using FlowerShop.Helper;
+
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+    Helper helper = new Helper();
+    CUSTOMER cust = (CUSTOMER)Session["Customers"];
+}
+
+<h5>Danh sách đơn hàng</h5>
+<p id="total"></p>
+
+<table class="table" style="text-align: center;vertical-align: middle;font-size : 12px">
+    <tr>
+        <th>
+            Mã đơn hàng
+        </th>
+        <th>
+            Ngày đặt hàng
+        </th>
+        <th>
+            Khách hàng
+        </th>
+        <th>
+            Hình thức thanh toán
+        </th>
+        <th>
+            Tình trạng thanh toán
+        </th>
+        <th>
+            Tình trạng đơn hàng
+        </th>
+        <th>
+            Ghi chú
+        </th>
+        <th style="width: 25%;">
+            Thao tác
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        CUSTOMER cus = helper.getCusByID((int)item.Customers_ID);
+        <tr>
+            <td>
+                Order-@Html.DisplayFor(modelItem => item.Orders_ID)
+            </td>
+            <td>
+                @String.Format("{0:dd/MM/yyyy}", item.Orders_Date)
+            </td>
+            <td>
+                @cus.Customers_Name
+            </td>
+            <td>
+                @if (item.Payment_Method == 0)
+                {
+                    <div class="alert alert-primary" role="alert">
+                        <i class="fas fa-money-bill-alt"></i> &nbsp;COD
+                    </div>
+                }
+                else if (item.Payment_Method == 1)
+                {
+                    <div class="alert alert-primary" role="alert">
+                        <i class="fab fa-cc-visa"></i> &nbsp;Chuyển khoản
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-primary" role="alert">
+                        <i class="fas fa-shipping-fast"></i> &nbsp;Khác
+                    </div>
+                }
+            </td>
+            <td>
+                @if (item.Payment_Status == 0)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <i class="fas fa-clipboard"></i>&nbsp; Chưa thanh toán
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle"></i> &nbsp;Đã thanh toán
+                    </div>
+                }
+            </td>
+            <td>
+                @if ((int)item.Status == 0)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <i class="fas fa-clipboard"></i>&nbsp; Đang xử lý
+                    </div>
+                }
+                else if ((int)item.Status == 1)
+                {
+                    <div class="alert alert-primary" role="alert">
+                        <i class="fas fa-shipping-fast"></i> &nbsp;Đang giao hàng
+                    </div>
+                }
+                else if ((int)item.Status == 2)
+                {
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle"></i> &nbsp;Hoàn thành
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-window-close"></i>&nbsp;Đã hủy
+                    </div>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                @if (cust.Customers_Name.CompareTo("Admin") == 0)
+                {
+                    <script>
+                         $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("getTotalCur", "Order")",
+                            data: {},
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                $("#total").html(response);
+                            },
+                            failure: function (response) {
+                                $("#total").html(response.responseText);
+                            },
+                            error: function (response) {
+                                $("#total").html(response.responseText);
+                            }
+                            });
+                    </script>
+                    if ((int)item.Status == 0)
+                    {
+                        <a href="@Url.Action("ChangeOrderStatus", "Order",new {ID = item.Orders_ID, code = 1})" class="btn btn-outline-primary">
+                            <i class="fas fa-shipping-fast"></i> &nbsp;Giao hàng
+                        </a>
+                        <a href="@Url.Action("ChangeOrderStatus", "Order",new {ID = item.Orders_ID, code = 5})" class="btn btn-outline-danger">
+                            <i class="fas fa-trash"></i> &nbsp;Hủy
+                        </a>
+                    }
+                    else if ((int)item.Status == 1)
+                    {
+                        <a href="@Url.Action("ChangeOrderStatus", "Order",new {ID = item.Orders_ID, code = 2})" class="btn btn-outline-primary">
+                            <i class="fas fa-check-circle"></i> &nbsp;Hoàn thành
+                        </a>
+                        <a href="@Url.Action("ChangeOrderStatus", "Order",new {ID = item.Orders_ID, code = 5})" class="btn btn-outline-danger">
+                            <i class="fas fa-trash"></i> &nbsp;Hủy
+                        </a>
+                    }
+                    <a href="@Url.Action("getListOrderDetail", "OrderDetail",new {Order_ID = item.Orders_ID})" class="btn btn-outline-info">
+                        <i class="fas fa-info-circle"></i> &nbsp;Chi tiết
+                    </a>
+                }
+                else
+                {
+                    if ((int)item.Status == 0)
+                    {
+                        <a href="@Url.Action("ChangeOrderStatus", "Order",new {ID = item.Orders_ID, code = 5})" class="btn btn-outline-primary">
+                            <i class='fas fa-trash'></i>&nbsp; Hủy
+                        </a>
+                    }
+                    <a href="@Url.Action("getListOrderDetail", "OrderDetail",new {Order_ID = item.Orders_ID})" class="btn btn-outline-info">
+                        <i class="fas fa-info-circle"></i> &nbsp;Chi tiết
+                    </a>
+                }
+            </td>
+        </tr>
+    }
+
+</table>

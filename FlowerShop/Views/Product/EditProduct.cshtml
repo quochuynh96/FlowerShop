@@ -1,0 +1,89 @@
+﻿@model FlowerShop.PRODUCT
+
+@{
+    ViewBag.Title = "Cập nhật thông tin sản phẩm";
+}
+
+<h4>Thay đổi thông tin cho sản phẩm : </h4>
+
+
+@using (Html.BeginForm("EditInfoProduct","Product",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal" style="font-size:12px">
+    <h6><i class="fas fa-box-open"></i> @Model.Product_Name</h6>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group row d-flex justify-content-center">
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Product_ID, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+            @Html.ValidationMessageFor(model => model.Product_ID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Tên sản phẩm</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Product_Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Product_Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Giá sản phẩm</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Product_Price, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Product_Price, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Mô tả về sản phẩm</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Product_Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Product_Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Số lượng</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Product_Stock_Quantity, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Product_Stock_Quantity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Loại sản phẩm</b>
+        <div class="col-md-5">
+            <select id="Categories_ID" name="Categories_ID" class="form-control">
+                @{
+                    foreach (var item in ViewData["listCategory"] as IList<CATEGORy>)
+                    {
+                        <option value="@item.Categories_ID">@item.Categories_Name</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <div class="col-md-offset-2 col-md-10 d-flex justify-content-center">
+            <input type="submit" value="Lưu thông tin" class="btn btn-outline-primary" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("<< Danh sách sản phẩm", "Index")
+</div>
+<div>
+    <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

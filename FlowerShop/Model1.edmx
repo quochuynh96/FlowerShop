@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FlowerShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CATEGORIES">
+          <Key>
+            <PropertyRef Name="Categories_ID" />
+          </Key>
+          <Property Name="Categories_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Categories_Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="CUSTOMERS">
+          <Key>
+            <PropertyRef Name="Customers_ID" />
+          </Key>
+          <Property Name="Customers_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Customers_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Customers_Email" Type="varchar" MaxLength="50" />
+          <Property Name="Customers_Password" Type="varchar" MaxLength="50" />
+          <Property Name="Customers_Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Customers_Address" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="IMAGE">
+          <Key>
+            <PropertyRef Name="Image_ID" />
+          </Key>
+          <Property Name="Image_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Image_Path" Type="nvarchar" MaxLength="100" />
+          <Property Name="Product_ID" Type="int" />
+        </EntityType>
+        <EntityType Name="ORDERS">
+          <Key>
+            <PropertyRef Name="Orders_ID" />
+          </Key>
+          <Property Name="Orders_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Orders_Date" Type="date" />
+          <Property Name="Customers_ID" Type="int" />
+          <Property Name="Status" Type="tinyint" />
+          <Property Name="Note" Type="nvarchar" MaxLength="150" />
+          <Property Name="Payment_Method" Type="tinyint" />
+          <Property Name="Payment_Status" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="ORDERS_DETAIL">
+          <Key>
+            <PropertyRef Name="OrdersDetail_ID" />
+          </Key>
+          <Property Name="OrdersDetail_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Orders_ID" Type="int" />
+          <Property Name="Product_ID" Type="int" />
+          <Property Name="Product_Num" Type="int" />
+        </EntityType>
+        <EntityType Name="PRODUCT">
+          <Key>
+            <PropertyRef Name="Product_ID" />
+          </Key>
+          <Property Name="Product_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Product_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Product_Price" Type="int" />
+          <Property Name="Product_Description" Type="nvarchar(max)" />
+          <Property Name="Product_Stock_Quantity" Type="bigint" />
+          <Property Name="Product_Status" Type="tinyint" />
+          <Property Name="Categories_ID" Type="int" />
+        </EntityType>
+        <Association Name="FK_IMAGE_PRODUCT">
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IMAGE" Type="Self.IMAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="Product_ID" />
+            </Principal>
+            <Dependent Role="IMAGE">
+              <PropertyRef Name="Product_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORDERS_CUSTOMERS">
+          <End Role="CUSTOMERS" Type="Self.CUSTOMERS" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUSTOMERS">
+              <PropertyRef Name="Customers_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="Customers_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORDERS_DETAIL_ORDERS">
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ORDERS_DETAIL" Type="Self.ORDERS_DETAIL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ORDERS">
+              <PropertyRef Name="Orders_ID" />
+            </Principal>
+            <Dependent Role="ORDERS_DETAIL">
+              <PropertyRef Name="Orders_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORDERS_DETAIL_PRODUCT">
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ORDERS_DETAIL" Type="Self.ORDERS_DETAIL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="Product_ID" />
+            </Principal>
+            <Dependent Role="ORDERS_DETAIL">
+              <PropertyRef Name="Product_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT_CATEGORIES">
+          <End Role="CATEGORIES" Type="Self.CATEGORIES" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CATEGORIES">
+              <PropertyRef Name="Categories_ID" />
+            </Principal>
+            <Dependent Role="PRODUCT">
+              <PropertyRef Name="Categories_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FlowerShopModelStoreContainer">
+          <EntitySet Name="CATEGORIES" EntityType="Self.CATEGORIES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IMAGE" EntityType="Self.IMAGE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ORDERS" EntityType="Self.ORDERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ORDERS_DETAIL" EntityType="Self.ORDERS_DETAIL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCT" EntityType="Self.PRODUCT" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IMAGE_PRODUCT" Association="Self.FK_IMAGE_PRODUCT">
+            <End Role="PRODUCT" EntitySet="PRODUCT" />
+            <End Role="IMAGE" EntitySet="IMAGE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORDERS_CUSTOMERS" Association="Self.FK_ORDERS_CUSTOMERS">
+            <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORDERS_DETAIL_ORDERS" Association="Self.FK_ORDERS_DETAIL_ORDERS">
+            <End Role="ORDERS" EntitySet="ORDERS" />
+            <End Role="ORDERS_DETAIL" EntitySet="ORDERS_DETAIL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORDERS_DETAIL_PRODUCT" Association="Self.FK_ORDERS_DETAIL_PRODUCT">
+            <End Role="PRODUCT" EntitySet="PRODUCT" />
+            <End Role="ORDERS_DETAIL" EntitySet="ORDERS_DETAIL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT_CATEGORIES" Association="Self.FK_PRODUCT_CATEGORIES">
+            <End Role="CATEGORIES" EntitySet="CATEGORIES" />
+            <End Role="PRODUCT" EntitySet="PRODUCT" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FlowerShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CATEGORy">
+          <Key>
+            <PropertyRef Name="Categories_ID" />
+          </Key>
+          <Property Name="Categories_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Categories_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PRODUCTs" Relationship="Self.FK_PRODUCT_CATEGORIES" FromRole="CATEGORIES" ToRole="PRODUCT" />
+        </EntityType>
+        <EntityType Name="CUSTOMER">
+          <Key>
+            <PropertyRef Name="Customers_ID" />
+          </Key>
+          <Property Name="Customers_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Customers_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Customers_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Customers_Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Customers_Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Customers_Address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ORDERS" Relationship="Self.FK_ORDERS_CUSTOMERS" FromRole="CUSTOMERS" ToRole="ORDERS" />
+        </EntityType>
+        <EntityType Name="IMAGE">
+          <Key>
+            <PropertyRef Name="Image_ID" />
+          </Key>
+          <Property Name="Image_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Image_Path" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Product_ID" Type="Int32" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_IMAGE_PRODUCT" FromRole="IMAGE" ToRole="PRODUCT" />
+        </EntityType>
+        <EntityType Name="ORDER">
+          <Key>
+            <PropertyRef Name="Orders_ID" />
+          </Key>
+          <Property Name="Orders_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Orders_Date" Type="DateTime" Precision="0" />
+          <Property Name="Customers_ID" Type="Int32" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="Note" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Payment_Method" Type="Byte" />
+          <Property Name="Payment_Status" Type="Byte" />
+          <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_ORDERS_CUSTOMERS" FromRole="ORDERS" ToRole="CUSTOMERS" />
+          <NavigationProperty Name="ORDERS_DETAIL" Relationship="Self.FK_ORDERS_DETAIL_ORDERS" FromRole="ORDERS" ToRole="ORDERS_DETAIL" />
+        </EntityType>
+        <EntityType Name="ORDERS_DETAIL">
+          <Key>
+            <PropertyRef Name="OrdersDetail_ID" />
+          </Key>
+          <Property Name="OrdersDetail_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Orders_ID" Type="Int32" />
+          <Property Name="Product_ID" Type="Int32" />
+          <Property Name="Product_Num" Type="Int32" />
+          <NavigationProperty Name="ORDER" Relationship="Self.FK_ORDERS_DETAIL_ORDERS" FromRole="ORDERS_DETAIL" ToRole="ORDERS" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_ORDERS_DETAIL_PRODUCT" FromRole="ORDERS_DETAIL" ToRole="PRODUCT" />
+        </EntityType>
+        <EntityType Name="PRODUCT">
+          <Key>
+            <PropertyRef Name="Product_ID" />
+          </Key>
+          <Property Name="Product_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Product_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Product_Price" Type="Int32" />
+          <Property Name="Product_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Product_Stock_Quantity" Type="Int64" />
+          <Property Name="Product_Status" Type="Byte" />
+          <Property Name="Categories_ID" Type="Int32" />
+          <NavigationProperty Name="CATEGORy" Relationship="Self.FK_PRODUCT_CATEGORIES" FromRole="PRODUCT" ToRole="CATEGORIES" />
+          <NavigationProperty Name="IMAGEs" Relationship="Self.FK_IMAGE_PRODUCT" FromRole="PRODUCT" ToRole="IMAGE" />
+          <NavigationProperty Name="ORDERS_DETAIL" Relationship="Self.FK_ORDERS_DETAIL_PRODUCT" FromRole="PRODUCT" ToRole="ORDERS_DETAIL" />
+        </EntityType>
+        <Association Name="FK_PRODUCT_CATEGORIES">
+          <End Role="CATEGORIES" Type="Self.CATEGORy" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CATEGORIES">
+              <PropertyRef Name="Categories_ID" />
+            </Principal>
+            <Dependent Role="PRODUCT">
+              <PropertyRef Name="Categories_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORDERS_CUSTOMERS">
+          <End Role="CUSTOMERS" Type="Self.CUSTOMER" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ORDERS" Type="Self.ORDER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUSTOMERS">
+              <PropertyRef Name="Customers_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="Customers_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IMAGE_PRODUCT">
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IMAGE" Type="Self.IMAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="Product_ID" />
+            </Principal>
+            <Dependent Role="IMAGE">
+              <PropertyRef Name="Product_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORDERS_DETAIL_ORDERS">
+          <End Role="ORDERS" Type="Self.ORDER" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ORDERS_DETAIL" Type="Self.ORDERS_DETAIL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ORDERS">
+              <PropertyRef Name="Orders_ID" />
+            </Principal>
+            <Dependent Role="ORDERS_DETAIL">
+              <PropertyRef Name="Orders_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORDERS_DETAIL_PRODUCT">
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ORDERS_DETAIL" Type="Self.ORDERS_DETAIL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="Product_ID" />
+            </Principal>
+            <Dependent Role="ORDERS_DETAIL">
+              <PropertyRef Name="Product_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FlowerShopEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CATEGORIES" EntityType="Self.CATEGORy" />
+          <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMER" />
+          <EntitySet Name="IMAGEs" EntityType="Self.IMAGE" />
+          <EntitySet Name="ORDERS" EntityType="Self.ORDER" />
+          <EntitySet Name="ORDERS_DETAIL" EntityType="Self.ORDERS_DETAIL" />
+          <EntitySet Name="PRODUCTs" EntityType="Self.PRODUCT" />
+          <AssociationSet Name="FK_PRODUCT_CATEGORIES" Association="Self.FK_PRODUCT_CATEGORIES">
+            <End Role="CATEGORIES" EntitySet="CATEGORIES" />
+            <End Role="PRODUCT" EntitySet="PRODUCTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORDERS_CUSTOMERS" Association="Self.FK_ORDERS_CUSTOMERS">
+            <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IMAGE_PRODUCT" Association="Self.FK_IMAGE_PRODUCT">
+            <End Role="PRODUCT" EntitySet="PRODUCTs" />
+            <End Role="IMAGE" EntitySet="IMAGEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORDERS_DETAIL_ORDERS" Association="Self.FK_ORDERS_DETAIL_ORDERS">
+            <End Role="ORDERS" EntitySet="ORDERS" />
+            <End Role="ORDERS_DETAIL" EntitySet="ORDERS_DETAIL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORDERS_DETAIL_PRODUCT" Association="Self.FK_ORDERS_DETAIL_PRODUCT">
+            <End Role="PRODUCT" EntitySet="PRODUCTs" />
+            <End Role="ORDERS_DETAIL" EntitySet="ORDERS_DETAIL" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FlowerShopModelStoreContainer" CdmEntityContainer="FlowerShopEntities">
+          <EntitySetMapping Name="CATEGORIES">
+            <EntityTypeMapping TypeName="FlowerShopModel.CATEGORy">
+              <MappingFragment StoreEntitySet="CATEGORIES">
+                <ScalarProperty Name="Categories_ID" ColumnName="Categories_ID" />
+                <ScalarProperty Name="Categories_Name" ColumnName="Categories_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CUSTOMERS">
+            <EntityTypeMapping TypeName="FlowerShopModel.CUSTOMER">
+              <MappingFragment StoreEntitySet="CUSTOMERS">
+                <ScalarProperty Name="Customers_ID" ColumnName="Customers_ID" />
+                <ScalarProperty Name="Customers_Name" ColumnName="Customers_Name" />
+                <ScalarProperty Name="Customers_Email" ColumnName="Customers_Email" />
+                <ScalarProperty Name="Customers_Password" ColumnName="Customers_Password" />
+                <ScalarProperty Name="Customers_Phone" ColumnName="Customers_Phone" />
+                <ScalarProperty Name="Customers_Address" ColumnName="Customers_Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IMAGEs">
+            <EntityTypeMapping TypeName="FlowerShopModel.IMAGE">
+              <MappingFragment StoreEntitySet="IMAGE">
+                <ScalarProperty Name="Image_ID" ColumnName="Image_ID" />
+                <ScalarProperty Name="Image_Path" ColumnName="Image_Path" />
+                <ScalarProperty Name="Product_ID" ColumnName="Product_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ORDERS">
+            <EntityTypeMapping TypeName="FlowerShopModel.ORDER">
+              <MappingFragment StoreEntitySet="ORDERS">
+                <ScalarProperty Name="Orders_ID" ColumnName="Orders_ID" />
+                <ScalarProperty Name="Orders_Date" ColumnName="Orders_Date" />
+                <ScalarProperty Name="Customers_ID" ColumnName="Customers_ID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Payment_Method" ColumnName="Payment_Method" />
+                <ScalarProperty Name="Payment_Status" ColumnName="Payment_Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ORDERS_DETAIL">
+            <EntityTypeMapping TypeName="FlowerShopModel.ORDERS_DETAIL">
+              <MappingFragment StoreEntitySet="ORDERS_DETAIL">
+                <ScalarProperty Name="OrdersDetail_ID" ColumnName="OrdersDetail_ID" />
+                <ScalarProperty Name="Orders_ID" ColumnName="Orders_ID" />
+                <ScalarProperty Name="Product_ID" ColumnName="Product_ID" />
+                <ScalarProperty Name="Product_Num" ColumnName="Product_Num" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCTs">
+            <EntityTypeMapping TypeName="FlowerShopModel.PRODUCT">
+              <MappingFragment StoreEntitySet="PRODUCT">
+                <ScalarProperty Name="Product_ID" ColumnName="Product_ID" />
+                <ScalarProperty Name="Product_Name" ColumnName="Product_Name" />
+                <ScalarProperty Name="Product_Price" ColumnName="Product_Price" />
+                <ScalarProperty Name="Product_Description" ColumnName="Product_Description" />
+                <ScalarProperty Name="Product_Stock_Quantity" ColumnName="Product_Stock_Quantity" />
+                <ScalarProperty Name="Product_Status" ColumnName="Product_Status" />
+                <ScalarProperty Name="Categories_ID" ColumnName="Categories_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

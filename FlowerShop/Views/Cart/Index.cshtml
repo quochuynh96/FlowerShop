@@ -1,0 +1,87 @@
+﻿@model IEnumerable<FlowerShop.Carts.Cart>
+@using FlowerShop.Helper
+@using System.Globalization;
+
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Helper helper = new Helper();
+    int n = Model.Count();
+}
+
+<h6>Giỏ hàng của bạn :</h6>
+
+<table class="table">
+    @if (n == 0)
+    {
+        <tr>
+            <td colspan="5" style="text-align: center;"><b style="color :red">Giỏ hàng rỗng !</b></td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <td colspan="5" style="text-align: center;">
+                <a href="@Url.Action("Index", "Order")" class="btn btn-outline-success">
+                    <i class="fas fa-clipboard-check"></i> &nbsp; Tiến hành đặt hàng
+                </a>
+            </td>
+        </tr>
+    }
+    <tr>
+        <th>
+        </th>
+        <th style="text-align: center;">
+            Sản phẩm
+        </th>
+        <th style="text-align: center;">
+            Giá sản phẩm
+        </th>
+        <th style="text-align: center;">
+            Số lượng mua
+        </th>
+        <th style="text-align: center;">
+            Thao tác
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        string imgPath = helper.getImageByProductID(item.Product.Product_ID);
+        int cer = (int)item.Product.Product_Price;
+        string cers = cer.ToString("C0", CultureInfo.CurrentCulture);
+
+        <tr>
+            <td style="text-align: center;">
+                <img src="@imgPath" alt="#" width="100px" />
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.Product.Product_Name)
+            </td>
+            <td style="text-align: center;">
+                @cer  &nbsp;VNĐ
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td style="text-align: center;">
+                @Html.ActionLink("Xóa khỏi giỏ hàng", "DeleteProduct", new { ID = item.Product.Product_ID }, new { @class = "btn btn-outline-danger" })
+            </td>
+        </tr>
+    }
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="text-align: center;">
+            Tổng thanh toán : <b style="color : red;" id="cart-cur-count2"></b> VNĐ&nbsp;|&nbsp;
+            <a href="@Url.Action("Delete", "Cart")" class="btn btn-outline-danger">
+                <i class="fas fa-trash"></i> &nbsp; Xóa giỏ hàng
+            </a>
+        </td>
+    </tr>
+
+</table>
+
+<div>
+    <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>

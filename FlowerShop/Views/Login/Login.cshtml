@@ -1,0 +1,58 @@
+﻿@model FlowerShop.CUSTOMER
+
+@{
+    ViewBag.Title = "Đăng nhập";
+}
+
+<h4>ĐĂNG NHẬP TÀI KHOẢN</h4>
+
+
+@using (Html.BeginForm("CheckLogin","Login",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h6>Nhập email và mật khẩu để đăng nhập vào hệ thống :</h6>
+    @Html.Raw(ViewBag.Message)
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Email</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Customers_Email, new { htmlAttributes = new { @class = "form-control", @type = "email", @value = ViewBag.CusEmail } })
+            @Html.ValidationMessageFor(model => model.Customers_Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <script>
+      setTimeout(function(){ $("#Customers_Email").val("@ViewBag.CusEmail"); }, 50);
+    </script>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Mật khẩu</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Customers_Password, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+            @Html.ValidationMessageFor(model => model.Customers_Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <div class="col-md-offset-2 col-md-10 row d-flex justify-content-center">
+            <input type="submit" value="Đăng nhập" class="btn btn-outline-success" />
+        </div>
+    </div>
+    <div class="form-group row d-flex justify-content-center">
+        <div class="col-md-offset-2 col-md-10 row d-flex justify-content-center">
+            <span>Nếu chưa có tài khoản ! Vui lòng <a href="@Url.Action("Index", "Register")">đăng ký</a> !</span>
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

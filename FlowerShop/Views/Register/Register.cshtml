@@ -1,0 +1,78 @@
+﻿@model FlowerShop.CUSTOMER
+
+@{
+    ViewBag.Title = "Đăng ký";
+}
+
+<h4>ĐĂNG KÝ TÀI KHOẢN</h4>
+
+
+@using (Html.BeginForm("Register","Register",FormMethod.Post)) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h6>Vui lòng điền đầy đủ các thông tin sau để đăng ký tài khoản khách hàng mới :</h6>
+    @Html.Raw(ViewBag.Message)
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Họ và tên</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Customers_Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Customers_Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Email</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Customers_Email, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Customers_Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Mật khẩu</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Customers_Password, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Customers_Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">SĐT</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Customers_Phone, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Customers_Phone, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <b class="control-label col-md-2">Địa chỉ</b>
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Customers_Address, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Customers_Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row d-flex justify-content-center">
+        <div class="col-md-offset-2 col-md-10 row d-flex justify-content-center">
+            <input type="submit" value="Đăng ký" class="btn btn-outline-primary" />
+        </div>
+    </div>
+    <div class="form-group row d-flex justify-content-center">
+        <div class="col-md-offset-2 col-md-10 row d-flex justify-content-center">
+            <span>Nếu đã có tài khoản ! Vui lòng <a href="@Url.Action("Index", "Login")">đăng nhập</a> !</span>
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> &nbsp; Về trang chủ !</a>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
